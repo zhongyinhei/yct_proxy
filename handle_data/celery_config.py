@@ -12,6 +12,7 @@
 # celery.exe flower --broker=amqp://guest:guest@localhost:5672/test 开启flower后台监控
 # celery.exe flower --broker=amqp://cic_admin:JYcxys@3030@192.168.1.152:5672/yct
 
+
 from raven import Client
 
 cli = Client('https://6bc40853ade046ebb83077e956be04d2:d862bee828d848b6882ef875baedfe8c@sentry.cicjust.com//5')
@@ -28,9 +29,9 @@ YuanQuToken = 'yuanqu001'
 SURL = "mysql+pymysql://cic_admin:159357a@192.168.10.11:3306/yct_proxy?charset=utf8&autocommit=true"
 # SURL = "mysql+pymysql://root:GHys1234&,><@!@192.168.10.246:3306/yct_proxy?charset=utf8&autocommit=true"
 
-REDIS_HOST = '192.168.20.245'
+REDIS_HOST = 'aliyun_redis'
 # REDIS_HOST = '192.168.1.152'
-REDIS_PORT = 16379
+REDIS_PORT = 6380
 
 
 # RABBITMQ_HOST = '192.168.1.152'
