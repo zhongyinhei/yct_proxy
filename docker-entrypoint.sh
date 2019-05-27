@@ -1,1 +1,1 @@
-/usr/local/bin/mitmdump --set block_global=false /code/start_script.py
+/usr/local/bin/mitmdump --set block_global=false -s /code/start_script.py
