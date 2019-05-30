@@ -21,5 +21,6 @@ celery_app = Celery('handle_data')#include=['handle_data.tasks']
 #从celery_config.py中导入
 celery_app.config_from_object('handle_data.celery_config')
 
+
 if __name__ == '__main__':
     celery_app.start()
