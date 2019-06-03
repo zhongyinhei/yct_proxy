@@ -25,16 +25,16 @@ url = ''
 YuanQuToken = 'yuanqu001'
 
 
-SURL = "mysql+pymysql://cic_admin:TaBoq,,1234@192.168.1.170:3306/yct_proxy?charset=utf8&autocommit=true"
-# SURL = "mysql+pymysql://cic_admin:159357a@192.168.10.11:3306/yct_proxy?charset=utf8&autocommit=true"
+# SURL = "mysql+pymysql://cic_admin:TaBoq,,1234@192.168.1.170:3306/yct_proxy?charset=utf8&autocommit=true"
+SURL = "mysql+pymysql://cic_admin:159357a@192.168.10.11:3306/yct_proxy?charset=utf8&autocommit=true"
 # SURL = "mysql+pymysql://root:GHys1234&,><@!@192.168.10.246:3306/yct_proxy?charset=utf8&autocommit=true"
 
 REDIS_HOST = 'aliyun_redis'
 REDIS_PORT = 6379
 
 
-# RABBITMQ_HOST = '192.168.1.152'
-RABBITMQ_HOST = '47.102.218.137'
+RABBITMQ_HOST = '172.19.79.104' #私有地址
+# RABBITMQ_HOST = '47.102.218.137' #公有
 RABBITMQ_PORT = 5672
 
 
