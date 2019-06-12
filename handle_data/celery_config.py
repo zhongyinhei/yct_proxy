@@ -7,34 +7,33 @@
 
 # celery -A handle_data worker -l info -Q to_consume -P eventlet  消费数据
 
-# mitmdump.exe -s start_script.py
+# mitmdump -s start_script.py
 
-# celery.exe flower --broker=amqp://guest:guest@localhost:5672/test 开启flower后台监控
-# celery.exe flower --broker=amqp://cic_admin:JYcxys@3030@192.168.1.152:5672/yct
-
+# celery flower --broker=amqp://guest:guest@localhost:5672/test 开启flower后台监控
+# celery flower --broker=amqp://cic_admin:JYcxys@3030@192.168.1.152:5672/yct
+# celery flower --broker=amqp://cic_admin:JYcxys@3030@47.102.218.137:5672/yct
 
 from raven import Client
 
 cli = Client('https://6bc40853ade046ebb83077e956be04d2:d862bee828d848b6882ef875baedfe8c@sentry.cicjust.com//5')
 
 
-#推送数据的接口
-url = ''
+rpyc_host = '127.0.0.1'
+# rpyc_host = '116.228.76.162'
+rpyc_port = 12233
 
-
-YuanQuToken = 'yuanqu001'
-
-
-# SURL = "mysql+pymysql://cic_admin:TaBoq,,1234@192.168.1.170:3306/yct_proxy?charset=utf8&autocommit=true"
-SURL = "mysql+pymysql://cic_admin:159357a@192.168.10.11:3306/yct_proxy?charset=utf8&autocommit=true"
+SURL = "mysql+pymysql://cic_admin:TaBoq,,1234@192.168.1.170:3306/yct_proxy?charset=utf8&autocommit=true"
+# SURL = "mysql+pymysql://cic_admin:159357a@192.168.10.11:3306/yct_proxy?charset=utf8&autocommit=true"
 # SURL = "mysql+pymysql://root:GHys1234&,><@!@192.168.10.246:3306/yct_proxy?charset=utf8&autocommit=true"
 
 REDIS_HOST = 'aliyun_redis'
+# REDIS_HOST = '127.0.0.1'
 REDIS_PORT = 6379
 
 
-RABBITMQ_HOST = '172.19.79.104' #私有地址
-# RABBITMQ_HOST = '47.102.218.137' #公有
+RABBITMQ_HOST = '172.19.79.104'
+# RABBITMQ_HOST = '127.0.0.1'
+# RABBITMQ_HOST = '47.102.218.137'
 RABBITMQ_PORT = 5672
 
 
@@ -73,11 +72,11 @@ CELERY_QUEUES = {
         "routing_key": "default",
         "exchange_type": "direct",
     },
-    "to_create": {  # 这是一个to_product队列 凡是to_product开头的routing key都会被放到这个队列
-        "routing_key": "create",
-        "exchange": "create",
-        "exchange_type": "direct",
-    },
+    # "to_create": {  # 这是一个to_product队列 凡是to_product开头的routing key都会被放到这个队列
+    #     "routing_key": "create",
+    #     "exchange": "create",
+    #     "exchange_type": "direct",
+    # },
     "to_analysis": {  # 设置扇形交换机
         "routing_key": "analysis",
         "exchange": "analysis",
@@ -92,7 +91,7 @@ CELERY_QUEUES = {
 
 # 给不同的任务设置不同的routers，将任务消息存放到对应的queue
 CELERY_ROUTES = {
-    'handle_data.tasks.to_create': {'queue': 'to_create', 'routing_key': 'create'},
+    # 'handle_data.tasks.to_create': {'queue': 'to_create', 'routing_key': 'create'},
     'handle_data.tasks.to_analysis': {'queue': 'to_analysis', 'routing_key': 'analysis'},
     'handle_data.tasks.to_save': {'queue': 'to_save', 'routing_key': 'save'},
 }

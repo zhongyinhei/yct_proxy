@@ -39,8 +39,11 @@ def to_analysis(name):
     '''解析数据'''
 
     #从redis中获取值
-    data_str = r.get(name)
-    # data_str = data_bytes.decode(encoding='utf-8')
+    data = r.get(name)
+    if isinstance(data,bytes):
+        data_str = data.decode(encoding='utf-8')
+    else:
+        data_str = data
     # 进行数据解析
     analysis_data = Analysis_data(data_str,name)
 
