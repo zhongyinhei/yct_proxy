@@ -1,20 +1,27 @@
 # -*- coding:utf-8 -*-
 '''创建任务'''
-import datetime
 import json
 import random
 import pickle
-import time
 from handle_data import celery_app
-from urllib.parse import urlencode
 
-from handle_data.celery_config import REDIS_HOST,REDIS_PORT
-from handle_data.save_to_mysql import Save_to_sql
+from handle_data.celery_config import *
 import redis
+
+from raven import Client
+
+# from handle_data.rpyc_conn import rpycSer
+from handle_data.save_to_mysql import Save_to_sql
+
+cli = Client('https://6bc40853ade046ebb83077e956be04d2:d862bee828d848b6882ef875baedfe8c@sentry.cicjust.com//5')
 
 #建立redis连接池
 redis_pool = redis.ConnectionPool(host=REDIS_HOST,port=REDIS_PORT,decode_responses=True)
 r = redis.Redis(connection_pool=redis_pool)
+
+#建立rpyc连接
+# import rpyc
+# conn = rpyc.connect(rpyc_host,rpyc_port)
 
 @celery_app.task(name='to_create')
 def to_create(data_str):
@@ -36,6 +43,7 @@ def to_create(data_str):
 
 @celery_app.task(name='to_analysis')
 def to_analysis(name):
+# def to_analysis(data_str):
     '''解析数据'''
 
     #从redis中获取值
@@ -46,7 +54,6 @@ def to_analysis(name):
         data_str = data
     # 进行数据解析
     analysis_data = Analysis_data(data_str,name)
-
     if not analysis_data:
         return
 
@@ -65,8 +72,8 @@ def to_save(data):
             save_to_analysis.del_set(data)
         else:
             save_to_analysis.insert_new(data)
-
     return data
+
 
 def Analysis_data(data_str,name):
     # 数据解析
@@ -133,8 +140,8 @@ def Analysis_data(data_str,name):
         analysis_data['registerAppNo'] = registerAppNo
         if r.lindex(registerAppNo, 1):
             # analysis_data['registerAppNo'] = r.lindex(registerAppNo, 0).decode(encoding='utf-8')
-            analysis_data['yctAppNo'] = r.lindex(registerAppNo, 1).decode(encoding='utf-8')
-            analysis_data['etpsName'] = r.lindex(registerAppNo, 2).decode(encoding='utf-8')
+            analysis_data['yctAppNo'] = r.lindex(registerAppNo, 1).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 1),bytes) else r.lindex(registerAppNo, 1)
+            analysis_data['etpsName'] = r.lindex(registerAppNo, 2).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 2),bytes) else r.lindex(registerAppNo, 2)
 
     #针对股东或成员的删除
     elif to_server in ['http://yct.sh.gov.cn/bizhallnz_yctnew/apply/investor/ajax/delete','http://yct.sh.gov.cn/bizhallnz_yctnew/apply/member/ajax_delete_member']:
@@ -150,13 +157,13 @@ def Analysis_data(data_str,name):
         registerAppNo = parameters_dict.get("registerAppNo",'') or parameters_dict.get('appNo') or parameters_dict.get('etpsMember.appNo')
         if yctAppNo or registerAppNo:
             if r.lindex(yctAppNo, 1):
-                analysis_data['registerAppNo'] = r.lindex(yctAppNo, 0).decode(encoding='utf-8')
-                analysis_data['yctAppNo'] = r.lindex(yctAppNo, 1).decode(encoding='utf-8')
-                analysis_data['etpsName'] = r.lindex(yctAppNo, 2).decode(encoding='utf-8')
+                analysis_data['registerAppNo'] = r.lindex(yctAppNo, 0).decode(encoding='utf-8') if isinstance(r.lindex(yctAppNo, 0),bytes) else r.lindex(yctAppNo, 0)
+                analysis_data['yctAppNo'] = r.lindex(yctAppNo, 1).decode(encoding='utf-8') if isinstance(r.lindex(yctAppNo, 1),bytes) else r.lindex(yctAppNo, 1)
+                analysis_data['etpsName'] = r.lindex(yctAppNo, 2).decode(encoding='utf-8') if isinstance(r.lindex(yctAppNo, 2),bytes) else r.lindex(yctAppNo, 2)
             elif r.lindex(registerAppNo, 1):
-                analysis_data['registerAppNo'] = r.lindex(registerAppNo, 0).decode(encoding='utf-8')
-                analysis_data['yctAppNo'] = r.lindex(registerAppNo, 1).decode(encoding='utf-8')
-                analysis_data['etpsName'] = r.lindex(registerAppNo, 2).decode(encoding='utf-8')
+                analysis_data['registerAppNo'] = r.lindex(registerAppNo, 0).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 0),bytes) else r.lindex(registerAppNo, 0)
+                analysis_data['yctAppNo'] = r.lindex(registerAppNo, 1).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 1),bytes) else r.lindex(registerAppNo, 1)
+                analysis_data['etpsName'] = r.lindex(registerAppNo, 2).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 2),bytes) else r.lindex(registerAppNo, 2)
 
     return analysis_data
 
@@ -229,6 +236,10 @@ def filter_step(to_server):
             pageName = form_name
             break
     return pageName
+
+
+
+
 
 if __name__ == '__main__':
     # res = to_product.apply_async(args=(1, 2), routing_key='product')
