@@ -4,7 +4,6 @@ import json
 import random
 import pickle
 from handle_data import celery_app
-
 from handle_data.celery_config import *
 import redis
 
