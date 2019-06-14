@@ -25,9 +25,11 @@ big_dict = {
         'etpsContact.certNo':'llysfz', #联络员身份证
     },
     'memberform':{
-        'etpsMember.personName':'cyxm', #其他主要成员姓名
-        'etpsMember.cetfId':'cysfz', #其他主要成员身份证
-        'etpsMember.hdshGb':'cyzw', #其他主要成员职务
+        'etpsMember.personName':'cyxm', #成员姓名
+        'etpsMember.cetfId':'cysfz', #成员身份证
+        'etpsMember.hdshGb':'cyzw', #成员职务
+        'etpsMember.mobile':'cysjh', #成员手机号
+        'etpsMember.address':'cydz', #成员地址
     },
     'bankform':{
         'bankCode_autoCompelet':'khyh', #开户银行

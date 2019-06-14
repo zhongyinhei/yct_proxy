@@ -124,10 +124,12 @@ def Analysis_data(data_str,name):
         registerAppNo = parameters_dict.get('registerAppNo','')
         yctAppNo = parameters_dict.get("yctAppNo",'') or parameters_dict.get('yctSocialUnit.yctAppNo','')
         etpsName = parameters_dict.get('etpsApp.etpsName','')
-        r.rpush(registerAppNo,registerAppNo,yctAppNo,etpsName)
-        r.rpush(yctAppNo,registerAppNo,yctAppNo,etpsName)
+        r.hset(registerAppNo,registerAppNo,etpsName)
+        r.hset(yctAppNo,yctAppNo,etpsName)
+        # r.rpush(registerAppNo,registerAppNo,yctAppNo,etpsName)
+        # r.rpush(yctAppNo,registerAppNo,yctAppNo,etpsName)
         analysis_data['registerAppNo'] = registerAppNo
-        analysis_data['yctAppNo'] = parameters_dict.get("yctAppNo", '')
+        analysis_data['yctAppNo'] = yctAppNo
         analysis_data['etpsName'] = etpsName
         analysis_data['to_server'] = 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/save_info'
 
@@ -137,10 +139,12 @@ def Analysis_data(data_str,name):
         gdNo = response.text #股东对应的编号
         analysis_data['customer_id'] = gdNo
         analysis_data['registerAppNo'] = registerAppNo
-        if r.lindex(registerAppNo, 1):
-            # analysis_data['registerAppNo'] = r.lindex(registerAppNo, 0).decode(encoding='utf-8')
-            analysis_data['yctAppNo'] = r.lindex(registerAppNo, 1).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 1),bytes) else r.lindex(registerAppNo, 1)
-            analysis_data['etpsName'] = r.lindex(registerAppNo, 2).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 2),bytes) else r.lindex(registerAppNo, 2)
+        # if r.lindex(registerAppNo, 1):
+        if r.hget(registerAppNo, registerAppNo):
+            # analysis_data['yctAppNo'] = r.lindex(registerAppNo, 1).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 1),bytes) else r.lindex(registerAppNo, 1)
+            # analysis_data['etpsName'] = r.lindex(registerAppNo, 2).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 2),bytes) else r.lindex(registerAppNo, 2)
+            analysis_data['etpsName'] = r.hget(registerAppNo,registerAppNo).decode(encoding='utf-8') if isinstance(r.hget(registerAppNo,registerAppNo),bytes) else r.hget(registerAppNo,registerAppNo)
+            analysis_data['yctAppNo'] = ''
 
     #针对股东或成员的删除
     elif to_server in ['http://yct.sh.gov.cn/bizhallnz_yctnew/apply/investor/ajax/delete','http://yct.sh.gov.cn/bizhallnz_yctnew/apply/member/ajax_delete_member']:
@@ -155,14 +159,22 @@ def Analysis_data(data_str,name):
         yctAppNo = parameters_dict.get("yctAppNo",'') or parameters_dict.get("yctSocialUnit.yctAppNo",'')
         registerAppNo = parameters_dict.get("registerAppNo",'') or parameters_dict.get('appNo') or parameters_dict.get('etpsMember.appNo')
         if yctAppNo or registerAppNo:
-            if r.lindex(yctAppNo, 1):
-                analysis_data['registerAppNo'] = r.lindex(yctAppNo, 0).decode(encoding='utf-8') if isinstance(r.lindex(yctAppNo, 0),bytes) else r.lindex(yctAppNo, 0)
-                analysis_data['yctAppNo'] = r.lindex(yctAppNo, 1).decode(encoding='utf-8') if isinstance(r.lindex(yctAppNo, 1),bytes) else r.lindex(yctAppNo, 1)
-                analysis_data['etpsName'] = r.lindex(yctAppNo, 2).decode(encoding='utf-8') if isinstance(r.lindex(yctAppNo, 2),bytes) else r.lindex(yctAppNo, 2)
-            elif r.lindex(registerAppNo, 1):
-                analysis_data['registerAppNo'] = r.lindex(registerAppNo, 0).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 0),bytes) else r.lindex(registerAppNo, 0)
-                analysis_data['yctAppNo'] = r.lindex(registerAppNo, 1).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 1),bytes) else r.lindex(registerAppNo, 1)
-                analysis_data['etpsName'] = r.lindex(registerAppNo, 2).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 2),bytes) else r.lindex(registerAppNo, 2)
+            # if r.lindex(yctAppNo, 1):
+            if r.hget(yctAppNo, yctAppNo):
+                # analysis_data['registerAppNo'] = r.lindex(yctAppNo, 0).decode(encoding='utf-8') if isinstance(r.lindex(yctAppNo, 0),bytes) else r.lindex(yctAppNo, 0)
+                # analysis_data['yctAppNo'] = r.lindex(yctAppNo, 1).decode(encoding='utf-8') if isinstance(r.lindex(yctAppNo, 1),bytes) else r.lindex(yctAppNo, 1)
+                # analysis_data['etpsName'] = r.lindex(yctAppNo, 2).decode(encoding='utf-8') if isinstance(r.lindex(yctAppNo, 2),bytes) else r.lindex(yctAppNo, 2)
+                analysis_data['registerAppNo'] = ''
+                analysis_data['yctAppNo'] = yctAppNo
+                analysis_data['etpsName'] = r.hget(yctAppNo,yctAppNo).decode(encoding='utf-8') if isinstance(r.hget(yctAppNo,yctAppNo),bytes) else r.hget(yctAppNo,yctAppNo)
+            # elif r.lindex(registerAppNo, 1):
+            elif r.hget(registerAppNo, registerAppNo):
+                # analysis_data['registerAppNo'] = r.lindex(registerAppNo, 0).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 0),bytes) else r.lindex(registerAppNo, 0)
+                # analysis_data['yctAppNo'] = r.lindex(registerAppNo, 1).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 1),bytes) else r.lindex(registerAppNo, 1)
+                # analysis_data['etpsName'] = r.lindex(registerAppNo, 2).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 2),bytes) else r.lindex(registerAppNo, 2)
+                analysis_data['yctAppNo'] = ''
+                analysis_data['registerAppNo'] = registerAppNo
+                analysis_data['etpsName'] = r.hget(registerAppNo,registerAppNo).decode(encoding='utf-8') if isinstance(r.hget(registerAppNo,registerAppNo),bytes) else r.hget(registerAppNo,registerAppNo)
 
     return analysis_data
 
