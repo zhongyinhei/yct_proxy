@@ -28,6 +28,7 @@ class Save_to_sql():
         new_dict = {}
         to_server = infodata.get('to_server')
         methods = infodata.get('methods')
+        etpsName = infodata.get('etpsName')
         customer_id = infodata.get('customer_id')
         registerAppNo = infodata.get('registerAppNo')
         if 'yct' not in to_server: #一窗通之外的数据不存库
@@ -36,7 +37,13 @@ class Save_to_sql():
         try:
             if self.table.filter_by(to_server=to_server, methods=methods,registerAppNo=registerAppNo,customer_id=customer_id).count():
                 # 已存在的记录直接更新
-                self.table.filter_by(to_server=to_server, methods=methods,registerAppNo=registerAppNo,customer_id=customer_id).update(infodata)
+                self.table.filter_by(to_server=to_server, methods=methods, registerAppNo=registerAppNo,customer_id=customer_id).update(infodata)
+                if to_server == 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/save_info':
+                    # 对于已经存在的公司，每次修改暂存，就整体更新一次公司名称包括股东主要成员信息，同步用户修改后的公司名称
+                    upinfo = {'etpsName': etpsName, 'isSynchronous': '0'}
+                    self.table.filter_by(registerAppNo=registerAppNo).update(upinfo)
+                    yctAppNo = infodata.get('yctAppNo')
+                    self.table.filter_by(yctAppNo=yctAppNo).update(upinfo)
                 db.commit()
                 return
         except Exception as e:

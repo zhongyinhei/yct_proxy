@@ -4,8 +4,6 @@ import json
 import random
 import pickle
 from handle_data import celery_app
-from handle_data.celery_config import *
-import redis
 
 from raven import Client
 
@@ -15,6 +13,8 @@ from handle_data.save_to_mysql import Save_to_sql
 cli = Client('https://6bc40853ade046ebb83077e956be04d2:d862bee828d848b6882ef875baedfe8c@sentry.cicjust.com//5')
 
 #建立redis连接池
+import redis
+from handle_data.celery_config import *
 redis_pool = redis.ConnectionPool(host=REDIS_HOST,port=REDIS_PORT,decode_responses=True)
 r = redis.Redis(connection_pool=redis_pool)
 
@@ -67,7 +67,7 @@ def to_save(data):
     save_to_analysis = Save_to_sql('yctformdata')
     if data:
         is_del = data.pop('delete_set')
-        if is_del: #判断是否删除记录
+        if is_del == '0': #判断是否删除记录
             save_to_analysis.del_set(data)
         else:
             save_to_analysis.insert_new(data)
@@ -115,7 +115,7 @@ def Analysis_data(data_str,name):
         'pageName':page_name,
         'anync': '',
         'isSynchronous':'0',
-        'delete_set':False
+        'delete_set':'1'
     }
     to_server = data_dict.get('to_server')
 
@@ -124,8 +124,7 @@ def Analysis_data(data_str,name):
         registerAppNo = parameters_dict.get('registerAppNo','')
         yctAppNo = parameters_dict.get("yctAppNo",'') or parameters_dict.get('yctSocialUnit.yctAppNo','')
         etpsName = parameters_dict.get('etpsApp.etpsName','')
-        r.hset(registerAppNo,registerAppNo,etpsName)
-        r.hset(yctAppNo,yctAppNo,etpsName)
+        r.mset({registerAppNo:etpsName,yctAppNo:etpsName})
         # r.rpush(registerAppNo,registerAppNo,yctAppNo,etpsName)
         # r.rpush(yctAppNo,registerAppNo,yctAppNo,etpsName)
         analysis_data['registerAppNo'] = registerAppNo
@@ -140,10 +139,10 @@ def Analysis_data(data_str,name):
         analysis_data['customer_id'] = gdNo
         analysis_data['registerAppNo'] = registerAppNo
         # if r.lindex(registerAppNo, 1):
-        if r.hget(registerAppNo, registerAppNo):
+        if r.get(registerAppNo):
             # analysis_data['yctAppNo'] = r.lindex(registerAppNo, 1).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 1),bytes) else r.lindex(registerAppNo, 1)
             # analysis_data['etpsName'] = r.lindex(registerAppNo, 2).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 2),bytes) else r.lindex(registerAppNo, 2)
-            analysis_data['etpsName'] = r.hget(registerAppNo,registerAppNo).decode(encoding='utf-8') if isinstance(r.hget(registerAppNo,registerAppNo),bytes) else r.hget(registerAppNo,registerAppNo)
+            analysis_data['etpsName'] = r.get(registerAppNo).decode(encoding='utf-8') if isinstance(r.get(registerAppNo),bytes) else r.get(registerAppNo)
             analysis_data['yctAppNo'] = ''
 
     #针对股东或成员的删除
@@ -151,7 +150,7 @@ def Analysis_data(data_str,name):
         registerAppNo = parameters_dict.get('appNo','')
         gdNo = parameters_dict.get('id')
         analysis_data['customer_id'] = gdNo
-        analysis_data['delete_set'] = True
+        analysis_data['delete_set'] = '0'
         analysis_data['registerAppNo'] = registerAppNo
 
     #针对其他的form的保存，前提是appNo对应apply_form已经存在库里
@@ -160,21 +159,21 @@ def Analysis_data(data_str,name):
         registerAppNo = parameters_dict.get("registerAppNo",'') or parameters_dict.get('appNo') or parameters_dict.get('etpsMember.appNo')
         if yctAppNo or registerAppNo:
             # if r.lindex(yctAppNo, 1):
-            if r.hget(yctAppNo, yctAppNo):
+            if r.get(yctAppNo):
                 # analysis_data['registerAppNo'] = r.lindex(yctAppNo, 0).decode(encoding='utf-8') if isinstance(r.lindex(yctAppNo, 0),bytes) else r.lindex(yctAppNo, 0)
                 # analysis_data['yctAppNo'] = r.lindex(yctAppNo, 1).decode(encoding='utf-8') if isinstance(r.lindex(yctAppNo, 1),bytes) else r.lindex(yctAppNo, 1)
                 # analysis_data['etpsName'] = r.lindex(yctAppNo, 2).decode(encoding='utf-8') if isinstance(r.lindex(yctAppNo, 2),bytes) else r.lindex(yctAppNo, 2)
                 analysis_data['registerAppNo'] = ''
                 analysis_data['yctAppNo'] = yctAppNo
-                analysis_data['etpsName'] = r.hget(yctAppNo,yctAppNo).decode(encoding='utf-8') if isinstance(r.hget(yctAppNo,yctAppNo),bytes) else r.hget(yctAppNo,yctAppNo)
+                analysis_data['etpsName'] = r.get(yctAppNo).decode(encoding='utf-8') if isinstance(r.get(yctAppNo),bytes) else r.get(yctAppNo)
             # elif r.lindex(registerAppNo, 1):
-            elif r.hget(registerAppNo, registerAppNo):
+            elif r.get(registerAppNo):
                 # analysis_data['registerAppNo'] = r.lindex(registerAppNo, 0).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 0),bytes) else r.lindex(registerAppNo, 0)
                 # analysis_data['yctAppNo'] = r.lindex(registerAppNo, 1).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 1),bytes) else r.lindex(registerAppNo, 1)
                 # analysis_data['etpsName'] = r.lindex(registerAppNo, 2).decode(encoding='utf-8') if isinstance(r.lindex(registerAppNo, 2),bytes) else r.lindex(registerAppNo, 2)
                 analysis_data['yctAppNo'] = ''
                 analysis_data['registerAppNo'] = registerAppNo
-                analysis_data['etpsName'] = r.hget(registerAppNo,registerAppNo).decode(encoding='utf-8') if isinstance(r.hget(registerAppNo,registerAppNo),bytes) else r.hget(registerAppNo,registerAppNo)
+                analysis_data['etpsName'] = r.get(registerAppNo).decode(encoding='utf-8') if isinstance(r.get(registerAppNo),bytes) else r.get(registerAppNo)
 
     return analysis_data
 
