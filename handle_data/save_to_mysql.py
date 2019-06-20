@@ -1,11 +1,14 @@
 # -*- coding:utf-8 -*-
 import datetime
-import sqlsoup
 from handle_data.celery_config import SURL
 from raven import Client
 cli = Client('https://6bc40853ade046ebb83077e956be04d2:d862bee828d848b6882ef875baedfe8c@sentry.cicjust.com//5')
 
-db = sqlsoup.SQLSoup(SURL)
+import sqlsoup
+try:
+    db = sqlsoup.SQLSoup(SURL)
+except Exception as e:
+    cli.captureException()
 
 class Save_to_sql():
 
@@ -33,14 +36,16 @@ class Save_to_sql():
         registerAppNo = infodata.get('registerAppNo')
         if 'yct' not in to_server: #一窗通之外的数据不存库
             return
-        # if to_server not in ['http://yct.sh.gov.cn/bizhallnz_yctnew/apply/investor/ajax/save','http://yct.sh.gov.cn/bizhallnz_yctnew/apply/member/ajax_save_member']:
+        if 'http://yct.sh.gov.cn/bizhallnz_yctnew/search' in to_server: #查询数据的不存库
+            return
+
         try:
             if self.table.filter_by(to_server=to_server, methods=methods,registerAppNo=registerAppNo,customer_id=customer_id).count():
                 # 已存在的记录直接更新
-                self.table.filter_by(to_server=to_server, methods=methods, registerAppNo=registerAppNo,customer_id=customer_id).update(infodata)
+                self.table.filter_by(to_server=to_server, methods=methods,registerAppNo=registerAppNo,customer_id=customer_id).update(infodata)
                 if to_server == 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/save_info':
-                    # 对于已经存在的公司，每次修改暂存，就整体更新一次公司名称包括股东主要成员信息，同步用户修改后的公司名称
-                    upinfo = {'etpsName': etpsName, 'isSynchronous': '0'}
+                    #对于已经存在的公司，每次修改暂存，就整体更新一次公司名称包括股东主要成员信息，同步用户修改后的公司名称
+                    upinfo = {'etpsName':etpsName,'isSynchronous':'0'}
                     self.table.filter_by(registerAppNo=registerAppNo).update(upinfo)
                     yctAppNo = infodata.get('yctAppNo')
                     self.table.filter_by(yctAppNo=yctAppNo).update(upinfo)
@@ -52,7 +57,8 @@ class Save_to_sql():
             db.rollback()
             return
 
-        # 直接插入一条新纪录
+
+        # 不存在就，直接插入一条新纪录
         new_dict.update(infodata)
         try:
             self.table.insert(**new_dict)
@@ -75,7 +81,8 @@ class Save_to_sql():
                     self._sentry.captureException()
                 db.rollback()
                 raise e
-        elif to_server == 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/save_info':
+
+        if to_server == 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/save_info':
             # 更新股东form或成员form的yctAppNo和etpsName
             try:
                 investor_url = 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/investor/ajax/save'
@@ -90,6 +97,7 @@ class Save_to_sql():
                 db.rollback()
         return
 
+
     def del_set(self,infodata):
         '''
         根据customer_id 删除对应的一条记录
@@ -98,15 +106,16 @@ class Save_to_sql():
         '''
         to_server = infodata.get('to_server')
         pageName = infodata.get('pageName')
-        registerAppNo = infodata.get('registerAppNo')
+        registerAppNo = infodata.get('registerAppNo','')
         customer_id = infodata.get('customer_id')
         # 删除指定股东或成员的记录
         try:
             the_set = None
-            if to_server == 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/investor/ajax/delete':
-                the_set = self.table.filter_by(to_server=to_server,pageName=pageName,registerAppNo=registerAppNo,customer_id=customer_id)
-            elif to_server == 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/member/ajax_delete_member':
-                the_set = self.table.filter_by(to_server=to_server,pageName=pageName,customer_id=customer_id)
+            if 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/investor/ajax/delete' in to_server:
+                the_set = self.table.filter_by(pageName=pageName,registerAppNo=registerAppNo,customer_id=customer_id).one()
+            elif 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/member/ajax_delete_member' in to_server:
+                # 删除成员的请求里没有AppNo，根据customer_id进行筛选
+                the_set = self.table.filter_by(pageName=pageName,customer_id=customer_id).one()
             db.delete(the_set)
             db.commit()
         except Exception as e:

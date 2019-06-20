@@ -2,9 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a6a13237-f0d0-47b4-84bd-c444d200b377" name="Default Changelist" comment="">
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handle_data/save_to_mysql.py" beforeDir="false" afterPath="$PROJECT_DIR$/handle_data/save_to_mysql.py" afterDir="false" />
+=======
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/cdebad4b-f338-4017-8771-598d6af7e025.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/handle_data/tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/handle_data/tasks.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -32,6 +39,13 @@
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
         <item name="@localhost" type="feb32156:DbDataSourceImpl" />
       </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="@192.168.1.170" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="yct_proxy: schema" type="76f4a085:MysqlImplModel$Schema" />
+        <item name="yctformdata: table" type="285a2a93:MysqlImplModel$Table" />
+      </path>
     </expand>
     <select />
   </component>
@@ -40,8 +54,13 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/handle_data/tasks.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
             <state relative-caret-position="469">
               <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
+=======
+            <state relative-caret-position="419">
+              <caret line="153" lean-forward="true" selection-start-line="153" selection-end-line="153" />
+>>>>>>> Stashed changes
               <folding>
                 <element signature="e#34#45#0" expanded="true" />
               </folding>
@@ -59,6 +78,7 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+<<<<<<< Updated upstream
         <entry file="file://$PROJECT_DIR$/handle_data/data_mapping.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="460">
@@ -72,6 +92,12 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="55">
               <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
+=======
+        <entry file="file://$PROJECT_DIR$/handle_data/save_to_mysql.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="263">
+              <caret line="40" lean-forward="true" selection-start-line="40" selection-end-line="40" />
+>>>>>>> Stashed changes
               <folding>
                 <element signature="e#23#38#0" expanded="true" />
               </folding>
@@ -82,8 +108,13 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/proxy_yct/middle_tool.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
             <state relative-caret-position="1320">
               <caret line="66" lean-forward="true" selection-start-line="66" selection-end-line="66" />
+=======
+            <state relative-caret-position="419">
+              <caret line="60" column="21" lean-forward="true" selection-start-line="60" selection-start-column="21" selection-end-line="60" selection-end-column="21" />
+>>>>>>> Stashed changes
               <folding>
                 <element signature="e#23#36#0" expanded="true" />
               </folding>
@@ -94,8 +125,13 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/handle_data/celery_config.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
             <state relative-caret-position="-134">
               <caret line="25" column="69" selection-start-line="25" selection-start-column="69" selection-end-line="25" selection-end-column="69" />
+=======
+            <state relative-caret-position="510">
+              <caret line="49" column="23" lean-forward="true" selection-start-line="49" selection-start-column="23" selection-end-line="49" selection-end-column="23" />
+>>>>>>> Stashed changes
             </state>
           </provider>
         </entry>
@@ -115,8 +151,13 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/handle_data/main.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
             <state relative-caret-position="80">
               <caret line="7" column="26" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="26" />
+=======
+            <state relative-caret-position="640">
+              <caret line="32" selection-start-line="32" selection-end-line="32" />
+>>>>>>> Stashed changes
               <folding>
                 <element signature="e#40#71#0" expanded="true" />
               </folding>
@@ -145,11 +186,17 @@
         <option value="$PROJECT_DIR$/Docker中运行mitiproxy-celery.md" />
         <option value="$PROJECT_DIR$/容器中运行mitiproxy-celery.md" />
         <option value="$PROJECT_DIR$/handle_data/data_mapping.py" />
+<<<<<<< Updated upstream
         <option value="$PROJECT_DIR$/handle_data/main.py" />
         <option value="$PROJECT_DIR$/proxy_yct/middle_tool.py" />
         <option value="$PROJECT_DIR$/handle_data/celery_config.py" />
+=======
+        <option value="$PROJECT_DIR$/proxy_yct/middle_tool.py" />
+        <option value="$PROJECT_DIR$/handle_data/main.py" />
+>>>>>>> Stashed changes
         <option value="$PROJECT_DIR$/handle_data/save_to_mysql.py" />
         <option value="$PROJECT_DIR$/handle_data/tasks.py" />
+        <option value="$PROJECT_DIR$/handle_data/celery_config.py" />
       </list>
     </option>
   </component>
@@ -163,22 +210,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="my-proxy" type="b2602c69:ProjectViewProjectNode" />
-              <item name="my-proxy" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="my-proxy" type="b2602c69:ProjectViewProjectNode" />
-              <item name="my-proxy" type="462c0819:PsiDirectoryNode" />
-              <item name="handle_data" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -475,11 +507,54 @@
       <option name="project" value="LOCAL" />
       <updated>1560911818209</updated>
     </task>
+<<<<<<< Updated upstream
     <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="76262000" />
+=======
+    <task id="LOCAL-00031" summary="更新代码">
+      <created>1560914998196</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1560914998196</updated>
+    </task>
+    <task id="LOCAL-00032" summary="发布到测试库进行测试">
+      <created>1560991882427</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1560991882427</updated>
+    </task>
+    <task id="LOCAL-00033" summary="发布到正式库">
+      <created>1560993481456</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1560993481456</updated>
+    </task>
+    <task id="LOCAL-00034" summary="修改">
+      <created>1561000155273</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1561000155273</updated>
+    </task>
+    <task id="LOCAL-00035" summary="发布">
+      <created>1561013162716</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1561013162716</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="103411000" />
+>>>>>>> Stashed changes
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -499,8 +574,13 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+<<<<<<< Updated upstream
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.32771084" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.25301206" />
+=======
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.19759037" />
+      <window_info anchor="bottom" id="Python Console" order="12" weight="0.1493976" />
+>>>>>>> Stashed changes
       <window_info anchor="bottom" id="Database Console" order="13" weight="0.32891566" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -515,11 +595,14 @@
     <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
+<<<<<<< Updated upstream
     <MESSAGE value="修改redis的连接地址为local，使用docker_reids连接" />
     <MESSAGE value="修改redis的连接地址为redis，使用docker_reids连接" />
     <MESSAGE value="修改reids的连接端口为6380" />
     <MESSAGE value="恢复到正式的发布环境的配置" />
     <MESSAGE value="启动参数添加 --set block_global=false" />
+=======
+>>>>>>> Stashed changes
     <MESSAGE value="去掉-s,启动参数添加 --set block_global=false" />
     <MESSAGE value="设置block_global=false，并以脚本启动" />
     <MESSAGE value="删除不用脚本" />
@@ -540,7 +623,16 @@
     <MESSAGE value="修改文件名" />
     <MESSAGE value="更新requirements.txt" />
     <MESSAGE value="'isSynchronous':'0' 将同步状态置为0，并重新打包" />
+<<<<<<< Updated upstream
     <option name="LAST_COMMIT_MESSAGE" value="'isSynchronous':'0' 将同步状态置为0，并重新打包" />
+=======
+    <MESSAGE value="更新代码" />
+    <MESSAGE value="发布到测试库进行测试" />
+    <MESSAGE value="发布到正式库" />
+    <MESSAGE value="修改" />
+    <MESSAGE value="发布" />
+    <option name="LAST_COMMIT_MESSAGE" value="发布" />
+>>>>>>> Stashed changes
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/proxy_yct/data_config.py">
@@ -646,10 +738,37 @@
     <entry file="file://$PROJECT_DIR$/img/aliyun01_flower.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/Dockerfile">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="260">
           <caret line="13" selection-start-line="13" selection-end-line="13" />
+=======
+    <entry file="file://$PROJECT_DIR$/start_script.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="100">
+            <caret line="5" selection-start-line="5" selection-end-line="5" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/cdebad4b-f338-4017-8771-598d6af7e025/console.sql">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="das://cdebad4b-f338-4017-8771-598d6af7e025/schema/yct_proxy/table/yctformdata">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
@@ -660,6 +779,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/start_script.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="100">
@@ -681,19 +801,48 @@
             <caret line="5" selection-start-line="5" selection-end-line="5" />
           </first_editor>
           <second_editor />
+=======
+    <entry file="file://$PROJECT_DIR$/handle_data/data_mapping.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20">
+          <caret line="1" column="12" lean-forward="true" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/handle_data/save_to_mysql.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="263">
+          <caret line="40" lean-forward="true" selection-start-line="40" selection-end-line="40" />
+          <folding>
+            <element signature="e#23#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Dockerfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/handle_data/main.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="80">
           <caret line="7" column="26" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="26" />
+=======
+        <state relative-caret-position="640">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
+>>>>>>> Stashed changes
           <folding>
             <element signature="e#40#71#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/proxy_yct/middle_tool.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1320">
@@ -708,13 +857,34 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-134">
           <caret line="25" column="69" selection-start-line="25" selection-start-column="69" selection-end-line="25" selection-end-column="69" />
+=======
+    <entry file="file://$PROJECT_DIR$/handle_data/celery_config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="49" column="23" lean-forward="true" selection-start-line="49" selection-start-column="23" selection-end-line="49" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/proxy_yct/middle_tool.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="419">
+          <caret line="60" column="21" lean-forward="true" selection-start-line="60" selection-start-column="21" selection-end-line="60" selection-end-column="21" />
+          <folding>
+            <element signature="e#23#34#0" expanded="true" />
+          </folding>
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/handle_data/tasks.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="469">
           <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
+=======
+        <state relative-caret-position="419">
+          <caret line="153" lean-forward="true" selection-start-line="153" selection-end-line="153" />
+>>>>>>> Stashed changes
           <folding>
             <element signature="e#34#45#0" expanded="true" />
           </folding>
