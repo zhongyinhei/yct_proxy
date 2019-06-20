@@ -55,8 +55,8 @@ def to_analysis(name):
         data_str = data
     # 进行数据解析
     analysis_data = Analysis_data(data_str, name)
-    # if not analysis_data:
-    #     return
+    if not analysis_data:
+        return
 
     # #将解析后的数据res2，插入数据库
     to_save.apply_async(args=[analysis_data], retry=True, queue='to_save', immutable=True)
@@ -81,7 +81,7 @@ def Analysis_data(data_str, name):
     data_dict = pickle.loads(eval(data_str))
 
     # 过滤 js,css,png,gif,jpg 的数据
-    for end_name in ['.js', '.css', '.png', '.jpg', '.gif']:
+    for end_name in ['.js', '.css', '.png', '.jpg', '.gif','.ico']:
         if end_name in data_dict.get('to_server'):
             return
     request = data_dict.get('request')
@@ -119,6 +119,26 @@ def Analysis_data(data_str, name):
         'delete_set': False
     }
     to_server = data_dict.get('to_server')
+
+    #过滤无用请求
+    unuse_urls = [
+        'http://yct.sh.gov.cn/namedeclare','http://yct.sh.gov.cn/portal_yct',
+        'http://yct.sh.gov.cn/favicon.ico',
+        'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/generateCsrfToken',
+        'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/loadAcceptSite',
+        'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/showDescription',
+        'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/establish/edit_yct',
+        'http://yct.sh.gov.cn/bizhallnz_yctnew/register',
+        'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/investor/edit',
+        'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/investor/ajax/entity_type',
+        'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/member/to_member_info',
+        'http://yct.sh.gov.cn/bizhallnz_yctnew/revert',
+        'http://yct.sh.gov.cn/bizhallnz_yctnew/main',
+        'http://yct.sh.gov.cn/bizhallnz_yctnew/index'
+    ]
+    for url in unuse_urls:
+        if url in to_server:
+            return
 
     # apply_form的保存，会产生公司名称和yctAppNo
     if 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/save_info' in to_server:
@@ -210,6 +230,7 @@ def handel_parameter(parameter_dict, url):
             gdsfz=parameter_dict.get('personInvtSet', [{}])[0].get('cetfId', ''),  # 身份证
             gddz=parameter_dict.get('address', ''),  # 地址
             gdrj=parameter_dict.get('cptl', ''),  # 认缴金额
+            czqx=parameter_dict.get('deadlineDate', ''),  # 出资期限
             gdlx=gdlx.get(parameter_dict.get('entityTypeId', ''), ''),  # 股东类型
         )
     else:
