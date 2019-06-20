@@ -80,6 +80,7 @@ class Proxy(classification_deal):
         #        break
         pickled = pickle.dumps(data_dict)
         data_str = str(pickled)
+        print(data_str)
         self.run_celery(data_str)
 
     def other_dealdatabag(self,flow):
