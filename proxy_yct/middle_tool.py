@@ -103,7 +103,7 @@ class Proxy(classification_deal):
         # data_bag['refer']=flow.request.headers.get('Referer','')
         data_bag['to_server'] = flow.request.url
         data_bag['response'] = flow.response
-        print(data_bag)
+        # print(data_bag)
         return data_bag
 
 
