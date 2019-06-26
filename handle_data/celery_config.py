@@ -17,8 +17,8 @@ from raven import Client
 cli = Client('https://6bc40853ade046ebb83077e956be04d2:d862bee828d848b6882ef875baedfe8c@sentry.cicjust.com//5')
 
 
-# SURL = "mysql+pymysql://cic_admin:TaBoq,,1234@192.168.1.170:3306/yct_proxy?charset=utf8&autocommit=true"
-SURL = "mysql+pymysql://cic_admin:159357a@192.168.10.11:3306/yct_proxy?charset=utf8&autocommit=true"
+SURL = "mysql+pymysql://cic_admin:TaBoq,,1234@192.168.1.170:3306/yct_proxy?charset=utf8&autocommit=true"
+# 正式的 SURL = "mysql+pymysql://cic_admin:159357a@192.168.10.11:3306/yct_proxy?charset=utf8&autocommit=true"
 # SURL = "mysql+pymysql://root:GHys1234&,><@!@192.168.10.246:3306/yct_proxy?charset=utf8&autocommit=true"
 
 
@@ -29,7 +29,7 @@ REDIS_PORT = 6379
 
 # RABBITMQ_HOST = '127.0.0.1'
 RABBITMQ_HOST = '47.102.218.137'
-RABBITMQ_PORT = 5672
+RABBITMQ_PORT = 15672
 
 
 # 注意，celery4版本后，CELERY_BROKER_URL改为BROKER_URL
