@@ -76,6 +76,8 @@ class Proxy(classification_deal):
         #        data_dict = self.yct_dealdatabag(flow)
         #        break
         #    else:
+        if 'yct.sh' not in flow.request.url:
+            return
         data_dict = self.other_dealdatabag(flow)
         #        break
         pickled = pickle.dumps(data_dict)
