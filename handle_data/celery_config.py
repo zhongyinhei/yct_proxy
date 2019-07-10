@@ -30,7 +30,7 @@ REDIS_PORT = 6379
 # RABBITMQ_HOST = '127.0.0.1'
 RABBITMQ_HOST = '47.102.218.137'
 RABBITMQ_PORT = 5672
-AA=1
+AA=2
 
 # 注意，celery4版本后，CELERY_BROKER_URL改为BROKER_URL
 from kombu import Queue, Exchange
