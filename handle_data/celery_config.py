@@ -22,8 +22,8 @@ SURL = "mysql+pymysql://cic_admin:TaBoq,,1234@192.168.1.170:3306/yct_proxy?chars
 # SURL = "mysql+pymysql://root:GHys1234&,><@!@192.168.10.246:3306/yct_proxy?charset=utf8&autocommit=true"
 
 
-REDIS_HOST = 'aliyun_redis'
-# REDIS_HOST = '127.0.0.1'
+# REDIS_HOST = 'aliyun_redis'
+REDIS_HOST = '127.0.0.1'
 REDIS_PORT = 6379
 
 
