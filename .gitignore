@@ -1,6 +1,5 @@
 logs
 test.py
-handle_data/celery_config.py
 .idea
 *.iml
 *.xml
