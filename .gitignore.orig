@@ -1,0 +1,13 @@
+<<<<<<< HEAD
+logs
+test.py
+.idea
+*.iml
+*.xml
+=======
+logs
+test.py
+.idea
+*.iml
+*.xml
+>>>>>>> yct_proxy_test
