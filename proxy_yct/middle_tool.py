@@ -3,6 +3,7 @@ import json
 import typing
 # from yct_task import my_customer,my_product
 # from yct_task_two import my_product
+import sqllite_operate
 from handle_data import tasks
 import mitmproxy.addonmanager
 import mitmproxy.connections
@@ -20,6 +21,7 @@ from handle_data.tasks import handel_parameter, filter_step
 import random
 
 import recorder
+
 logger=recorder.get_log().config_log('./logs/request.log')
 
 import redis
