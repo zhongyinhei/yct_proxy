@@ -98,8 +98,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/proxy_yct/middle_tool.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="111">
               <caret line="274" column="3" selection-start-line="274" selection-start-column="3" selection-end-line="281" selection-end-column="35" />
+=======
+            <state relative-caret-position="261">
+              <caret line="274" column="3" selection-start-line="274" selection-start-column="3" selection-end-line="281" selection-end-column="33" />
+>>>>>>> yct_proxy_test
               <folding>
                 <element signature="e#23#34#0" expanded="true" />
               </folding>
@@ -111,7 +116,11 @@
         <entry file="file://$PROJECT_DIR$/handle_data/main.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="150">
+<<<<<<< HEAD
               <caret line="12" column="14" selection-start-line="12" selection-start-column="14" selection-end-line="12" selection-end-column="14" />
+=======
+              <caret line="12" column="14" lean-forward="true" selection-start-line="12" selection-start-column="14" selection-end-line="12" selection-end-column="14" />
+>>>>>>> yct_proxy_test
             </state>
           </provider>
         </entry>
@@ -143,7 +152,7 @@
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="125">
-              <caret line="5" selection-start-line="5" selection-end-line="5" />
+              <caret line="6" selection-start-line="6" selection-end-line="6" />
             </state>
           </provider>
         </entry>
@@ -684,6 +693,16 @@
     <entry file="file://$PROJECT_DIR$/handle_data/data_mapping.py" />
     <entry file="file://$PROJECT_DIR$/README.md" />
     <entry file="file://$PROJECT_DIR$/docker-entrypoint.sh" />
+<<<<<<< HEAD
+=======
+    <entry file="file://$PROJECT_DIR$/handle_data/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="12" column="14" lean-forward="true" selection-start-line="12" selection-start-column="14" selection-end-line="12" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+>>>>>>> yct_proxy_test
     <entry file="file://$PROJECT_DIR$/proxy_yct/mysql_data.py" />
     <entry file="file://$PROJECT_DIR$/Dockerfile">
       <provider selected="true" editor-type-id="text-editor">
@@ -706,6 +725,16 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
+=======
+    <entry file="file://$PROJECT_DIR$/handle_data/tasks.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="111">
+          <caret line="27" column="4" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+>>>>>>> yct_proxy_test
     <entry file="file://$PROJECT_DIR$/handle_data/save_to_mysql.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-592">
@@ -743,14 +772,22 @@
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="125">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/handle_data/main.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="150">
           <caret line="12" column="14" selection-start-line="12" selection-start-column="14" selection-end-line="12" selection-end-column="14" />
+=======
+        <state relative-caret-position="261">
+          <caret line="274" column="3" selection-start-line="274" selection-start-column="3" selection-end-line="281" selection-end-column="33" />
+          <folding>
+            <element signature="e#23#34#0" expanded="true" />
+          </folding>
+>>>>>>> yct_proxy_test
         </state>
       </provider>
     </entry>
@@ -763,11 +800,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/proxy_yct/middle_tool.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="111">
           <caret line="274" column="3" selection-start-line="274" selection-start-column="3" selection-end-line="281" selection-end-column="35" />
           <folding>
             <element signature="e#23#34#0" expanded="true" />
           </folding>
+=======
+        <state relative-caret-position="450">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
+>>>>>>> yct_proxy_test
         </state>
       </provider>
     </entry>
