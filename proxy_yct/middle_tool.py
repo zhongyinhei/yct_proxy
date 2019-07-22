@@ -69,11 +69,8 @@ class Proxy(classification_deal):
         ####################################
         request = flow.request
         to_server = flow.request.url
-        name = str(random.random())
-        '''区分不同页面的form 1.page_name=''错误的url 2.page_name=form_name 正确的url'''
-        page_name = filter_step(to_server)
         ###########start analysis###########
-        '''排除无用的url请求'''
+        '''1.排除无用的url请求'''
         if not request:
             return
         if not to_server:
@@ -85,7 +82,7 @@ class Proxy(classification_deal):
             if end_name in to_server:
                 return
 
-        '''初始数据，非urlencode或json格式的数据则置空'''
+        '''2.初始数据，非urlencode或json格式的数据则置空'''
         parameters_dict = {}
         try:
             request_form = request.urlencoded_form  #只能取到urlencode格式的表单数据
@@ -103,25 +100,29 @@ class Proxy(classification_deal):
         # 1.非yct的请求 2.非css，js，jpg。。  3.非urlencode或json格式的，或空数据   4.过滤无用请求 -->不过滤了 都留着
         '''得到全数据parameters_dict'''
 
-        '''错误的url：parameters={无数据}      正确的url：parameters={有数据}'''
-        parameters = handel_parameter(parameters_dict, to_server)
+        flow.request.product_id = str(random.random())
+        # '''区分不同页面的form 1.page_name=''错误的url 2.page_name=form_name 正确的url'''
+        page_name = filter_step(to_server)
 
-        analysis_data = {
-            'product_id': name,
-            'customer_id': '',
-            'methods': request.method,
-            'web_name': request.host,
-            'to_server': to_server,
-            'time_circle': time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())),
-            'parameters': parameters,
-            'pageName': page_name,
-            'anync': '',
-            'isSynchronous': '0',
-            'delete_set': False
-        }
+        # '''错误的url：parameters={无数据}      正确的url：parameters={有数据}'''
+        # parameters = handel_parameter(parameters_dict, to_server)
+
+        # analysis_data = {
+        #     'product_id': flow.request.product_id,
+        #     'customer_id': '',
+        #     'methods': request.method,
+        #     'web_name': request.host,
+        #     'to_server': to_server,
+        #     'time_circle': time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())),
+        #     'parameters': parameters,
+        #     'pageName': page_name,
+        #     'anync': '',
+        #     'isSynchronous': '0',
+        #     'delete_set': False
+        # }
 
         analysis_data_bak = {
-            'product_id': name,
+            'product_id': flow.request.product_id,
             'customer_id': '',
             'methods': request.method,
             'web_name': request.host,
@@ -137,116 +138,120 @@ class Proxy(classification_deal):
         '''to_server,pagename,parameters,parameters_dict
         analysis_data    analysis_data_bak'''
 
-        if page_name:
-            logger.info('start analysis_data=%s' % analysis_data)
-            # apply_form的保存，会产生公司名称和yctAppNo
-            if 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/save_info' in to_server:
-                logger.info('start apply_form-save:product_id=%s' % (name))
-                registerAppNo = parameters_dict.get('registerAppNo', '')
-                yctAppNo = parameters_dict.get("yctAppNo", '') or parameters_dict.get('yctSocialUnit.yctAppNo', '')
-                etpsName = parameters_dict.get('etpsApp.etpsName', '')
-                # 将registerAppNo对应公司名称和yctAppNo对应公司名称，暂存到redis
-                r.mset({registerAppNo: etpsName, yctAppNo: etpsName})
-                analysis_data['registerAppNo'] = registerAppNo
-                analysis_data['yctAppNo'] = yctAppNo
-                analysis_data['etpsName'] = etpsName
-                analysis_data['to_server'] = 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/save_info'
-                logger.info(
-                    'end apply_form:product_id=%s analysis_data=%s ' % (name, analysis_data))
-                logger.info(
-                    'end apply_form:product_id=%s parameters=%s ' % (name, json.loads(parameters)))
+        logger.info('product_id=%s to_server=%s pageName=%s ' % (flow.request.product_id,to_server,page_name))
+        logger.info('product_id=%s parameters=%s ' % (flow.request.product_id, parameters_dict))
+        logger.info('product_id=%s analysis_data_bak=%s' % (flow.request.product_id,analysis_data_bak))
 
-
-            # 针对股东或成员的保存
-            elif to_server in ['http://yct.sh.gov.cn/bizhallnz_yctnew/apply/investor/ajax/save',
-                               'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/member/ajax_save_member']:
-                logger.info('start investor-save&member-save:product_id=%s' % (name))
-                registerAppNo = parameters_dict.get('appNo') or parameters_dict.get(
-                    'etpsMember.appNo')  # 注册公司对应的唯一的appNo
-                # gdNo = response.text  # 股东对应的编号
-                # analysis_data['customer_id'] = gdNo
-                analysis_data['customer_id'] = ''
-                analysis_data['registerAppNo'] = registerAppNo
-                if r.get(registerAppNo):
-                    analysis_data['etpsName'] = r.get(registerAppNo).decode(encoding='utf-8') if isinstance(
-                        r.get(registerAppNo), bytes) else r.get(registerAppNo)
-                    analysis_data['yctAppNo'] = ''  # 股东没有yctAppNo，置为空
-                logger.info(
-                    'end investor-save&member-save:product_id=%s analysis_data=%s ' % (name, analysis_data))
-                logger.info(
-                    'end investor-save&member-save:product_id=%s parameters=%s ' % (name, json.loads(parameters)))
-
-            # 针对股东的删除
-            elif 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/investor/ajax/delete' in to_server:
-                from urllib import parse
-
-                logger.info('start investor-delete:product_id=%s' % (name))
-                params = parse.parse_qs(parse.urlparse(to_server).query)
-                gdNo = params.get('id', [])[0]
-                registerAppNo = params.get('appNo', [])[0]
-                analysis_data['customer_id'] = gdNo
-                analysis_data['registerAppNo'] = registerAppNo
-                analysis_data['delete_set'] = True
-                logger.info(
-                    'end investor-save&member-save:product_id=%s analysis_data=%s ' % (name, analysis_data))
-                logger.info(
-                    'end investor-save&member-save:product_id=%s parameters=%s ' % (name, json.loads(parameters)))
-
-            # 针对成员的删除
-            elif 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/member/ajax_delete_member' in to_server:
-                from urllib import parse
-                logger.info('start member-delete:product_id=%s' % (name))
-                params = parse.parse_qs(parse.urlparse(to_server).query)
-                gdNo = params.get('id', [])[0]
-                analysis_data['customer_id'] = gdNo
-                analysis_data['delete_set'] = True
-                logger.info(
-                    'end member-delete:product_id=%s analysis_data=%s ' % (name, analysis_data))
-                logger.info(
-                    'end member-delete:product_id=%s parameters=%s ' % (name, json.loads(parameters)))
-
-            # 针对其他的form的保存，前提是appNo对应apply_form已经存在库里
-            else:
-                logger.info('start others-save:product_id=%s' % (name))
-                yctAppNo = parameters_dict.get("yctAppNo", '') or parameters_dict.get("yctSocialUnit.yctAppNo", '')
-                registerAppNo = parameters_dict.get("registerAppNo", '') or parameters_dict.get(
-                    'appNo') or parameters_dict.get('etpsMember.appNo')
-
-                if yctAppNo or registerAppNo:
-                    if r.get(yctAppNo):
-                        analysis_data['registerAppNo'] = ''
-                        analysis_data['yctAppNo'] = yctAppNo
-                        analysis_data['etpsName'] = r.get(yctAppNo).decode(encoding='utf-8') if isinstance(
-                            r.get(yctAppNo),
-                            bytes) else r.get(
-                            yctAppNo)
-                    elif r.get(registerAppNo):
-                        analysis_data['yctAppNo'] = ''
-                        analysis_data['registerAppNo'] = registerAppNo
-                        analysis_data['etpsName'] = r.get(registerAppNo).decode(encoding='utf-8') if isinstance(
-                            r.get(registerAppNo), bytes) else r.get(registerAppNo)
-                logger.info(
-                    'end others-save:product_id=%s analysis_data=%s ' % (name, analysis_data))
-                logger.info(
-                    'end others-save:product_id=%s parameters=%s ' % (name, json.loads(parameters)))
-        else: #处理 analysis_data_bak
-            logger.info('product_id=%s' % (name))
-            logger.info('analysis_data_bak=%s' % analysis_data_bak)
-            logger.info(
-                'product_id=%s parameters=%s ' % (name, parameters_dict))
+        # if page_name:
+        #     logger.info('start analysis_data_bak=%s' % analysis_data_bak)
+        #     # apply_form的保存，会产生公司名称和yctAppNo
+        #     if 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/save_info' in to_server:
+        #         logger.info('start apply_form-save:product_id=%s' % (flow.request.product_id))
+        #         registerAppNo = parameters_dict.get('registerAppNo', '')
+        #         yctAppNo = parameters_dict.get("yctAppNo", '') or parameters_dict.get('yctSocialUnit.yctAppNo', '')
+        #         etpsName = parameters_dict.get('etpsApp.etpsName', '')
+        #         # 将registerAppNo对应公司名称和yctAppNo对应公司名称，暂存到redis
+        #         r.mset({registerAppNo: etpsName, yctAppNo: etpsName})
+        #         analysis_data_bak['registerAppNo'] = registerAppNo
+        #         analysis_data_bak['yctAppNo'] = yctAppNo
+        #         analysis_data_bak['etpsName'] = etpsName
+        #         analysis_data_bak['to_server'] = 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/save_info'
+        #         logger.info(
+        #             'end apply_form:product_id=%s analysis_data_bak=%s ' % (name, analysis_data_bak))
+        #         logger.info(
+        #             'end apply_form:product_id=%s parameters=%s ' % (name, json.loads(parameters)))
+        #
+        #
+        #     # 针对股东或成员的保存
+        #     elif to_server in ['http://yct.sh.gov.cn/bizhallnz_yctnew/apply/investor/ajax/save',
+        #                        'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/member/ajax_save_member']:
+        #         logger.info('start investor-save&member-save:product_id=%s' % (name))
+        #         registerAppNo = parameters_dict.get('appNo') or parameters_dict.get(
+        #             'etpsMember.appNo')  # 注册公司对应的唯一的appNo
+        #         # gdNo = response.text  # 股东对应的编号
+        #         # analysis_data_bak['customer_id'] = gdNo
+        #         analysis_data_bak['customer_id'] = ''
+        #         analysis_data_bak['registerAppNo'] = registerAppNo
+        #         if r.get(registerAppNo):
+        #             analysis_data_bak['etpsName'] = r.get(registerAppNo).decode(encoding='utf-8') if isinstance(
+        #                 r.get(registerAppNo), bytes) else r.get(registerAppNo)
+        #             analysis_data_bak['yctAppNo'] = ''  # 股东没有yctAppNo，置为空
+        #         logger.info(
+        #             'end investor-save&member-save:product_id=%s analysis_data_bak=%s ' % (name, analysis_data_bak))
+        #         logger.info(
+        #             'end investor-save&member-save:product_id=%s parameters=%s ' % (name, json.loads(parameters)))
+        #
+        #     # 针对股东的删除
+        #     elif 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/investor/ajax/delete' in to_server:
+        #         from urllib import parse
+        #
+        #         logger.info('start investor-delete:product_id=%s' % (name))
+        #         params = parse.parse_qs(parse.urlparse(to_server).query)
+        #         gdNo = params.get('id', [])[0]
+        #         registerAppNo = params.get('appNo', [])[0]
+        #         analysis_data_bak['customer_id'] = gdNo
+        #         analysis_data_bak['registerAppNo'] = registerAppNo
+        #         analysis_data_bak['delete_set'] = True
+        #         logger.info(
+        #             'end investor-save&member-save:product_id=%s analysis_data_bak=%s ' % (name, analysis_data_bak))
+        #         logger.info(
+        #             'end investor-save&member-save:product_id=%s parameters=%s ' % (name, json.loads(parameters)))
+        #
+        #     # 针对成员的删除
+        #     elif 'http://yct.sh.gov.cn/bizhallnz_yctnew/apply/member/ajax_delete_member' in to_server:
+        #         from urllib import parse
+        #         logger.info('start member-delete:product_id=%s' % (name))
+        #         params = parse.parse_qs(parse.urlparse(to_server).query)
+        #         gdNo = params.get('id', [])[0]
+        #         analysis_data_bak['customer_id'] = gdNo
+        #         analysis_data_bak['delete_set'] = True
+        #         logger.info(
+        #             'end member-delete:product_id=%s analysis_data_bak=%s ' % (name, analysis_data_bak))
+        #         logger.info(
+        #             'end member-delete:product_id=%s parameters=%s ' % (name, json.loads(parameters)))
+        #
+        #     # 针对其他的form的保存，前提是appNo对应apply_form已经存在库里
+        #     else:
+        #         logger.info('start others-save:product_id=%s' % (name))
+        #         yctAppNo = parameters_dict.get("yctAppNo", '') or parameters_dict.get("yctSocialUnit.yctAppNo", '')
+        #         registerAppNo = parameters_dict.get("registerAppNo", '') or parameters_dict.get(
+        #             'appNo') or parameters_dict.get('etpsMember.appNo')
+        #
+        #         if yctAppNo or registerAppNo:
+        #             if r.get(yctAppNo):
+        #                 analysis_data_bak['registerAppNo'] = ''
+        #                 analysis_data_bak['yctAppNo'] = yctAppNo
+        #                 analysis_data_bak['etpsName'] = r.get(yctAppNo).decode(encoding='utf-8') if isinstance(
+        #                     r.get(yctAppNo),
+        #                     bytes) else r.get(
+        #                     yctAppNo)
+        #             elif r.get(registerAppNo):
+        #                 analysis_data_bak['yctAppNo'] = ''
+        #                 analysis_data_bak['registerAppNo'] = registerAppNo
+        #                 analysis_data_bak['etpsName'] = r.get(registerAppNo).decode(encoding='utf-8') if isinstance(
+        #                     r.get(registerAppNo), bytes) else r.get(registerAppNo)
+        #         logger.info(
+        #             'end others-save:product_id=%s analysis_data_bak=%s ' % (name, analysis_data_bak))
+        #         logger.info(
+        #             'end others-save:product_id=%s parameters=%s ' % (name, json.loads(parameters)))
+        # else: #处理 analysis_data_bak
+        #     logger.info('product_id=%s' % (name))
+        #     logger.info('analysis_data_bak=%s' % analysis_data_bak)
+        #     logger.info(
+        #         'product_id=%s parameters=%s ' % (name, parameters_dict))
 
         ###########end analysis###########
         ###########database###########
         save_to_analysis = Save_to_sql('yctformdata_request')
-        if page_name:
-            if analysis_data:
-                is_del = analysis_data.pop('delete_set')
-                if is_del:  # 判断是否删除记录
-                    save_to_analysis.del_set(analysis_data)
-                else:
-                    save_to_analysis.insert_new(analysis_data)
-        else:
-            save_to_analysis.insert_new(analysis_data_bak)
+        # if page_name:
+        #     if analysis_data_bak:
+        #         is_del = analysis_data_bak.pop('delete_set')
+        #         if is_del:  # 判断是否删除记录
+        #             save_to_analysis.del_set(analysis_data_bak)
+        #         else:
+        #             save_to_analysis.insert_new(analysis_data_bak)
+        # else:
+        save_to_analysis.insert_new(analysis_data_bak)
         ####################################
 
     def responseheaders(self, flow: mitmproxy.http.HTTPFlow):
@@ -290,6 +295,7 @@ class Proxy(classification_deal):
         # data_bag['refer']=flow.request.headers.get('Referer','')
         data_bag['to_server'] = flow.request.url
         data_bag['response'] = flow.response
+        data_bag['product_id'] = flow.request.product_id
         return data_bag
 
     def yct_dealdatabag(self,flow):
