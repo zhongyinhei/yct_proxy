@@ -22,8 +22,8 @@ SURL = "mysql+pymysql://cic_admin:TaBoq,,1234@192.168.1.170:3306/yct_proxy?chars
 # SURL = "mysql+pymysql://root:GHys1234&,><@!@192.168.10.246:3306/yct_proxy?charset=utf8&autocommit=true"
 
 
-# REDIS_HOST = 'aliyun_redis'
-REDIS_HOST = '127.0.0.1'
+REDIS_HOST = 'aliyun_redis'
+# REDIS_HOST = '127.0.0.1'
 REDIS_PORT = 6379
 
 
@@ -36,7 +36,7 @@ AA=2
 from kombu import Queue, Exchange
 
 # BROKER_URL = 'amqp://cic_admin:JYcxys@3030@{}:{}/yct'.format(RABBITMQ_HOST,RABBITMQ_PORT)
-BROKER_URL = 'amqp://cic_admin:JYcxys@3030@{}:{}/test'.format(RABBITMQ_HOST,RABBITMQ_PORT)
+BROKER_URL = 'amqp://cic_admin:JYcxys@3030@{}:{}/xjj_test_yct'.format(RABBITMQ_HOST,RABBITMQ_PORT)
 # BROKER_URL = 'amqp://cic_admin:JYcxys@3030@{}:{}/newprocy-yuanqu01'.format(RABBITMQ_HOST,RABBITMQ_PORT)
 # BROKER_URL = 'amqp://test:test@127.0.0.1:5672/test'
 
