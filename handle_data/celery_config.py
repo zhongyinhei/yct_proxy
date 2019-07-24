@@ -36,7 +36,7 @@ AA=2
 from kombu import Queue, Exchange
 
 # BROKER_URL = 'amqp://cic_admin:JYcxys@3030@{}:{}/yct'.format(RABBITMQ_HOST,RABBITMQ_PORT)
-BROKER_URL = 'amqp://cic_admin:JYcxys@3030@{}:{}/test'.format(RABBITMQ_HOST,RABBITMQ_PORT)
+BROKER_URL = 'amqp://cic_admin:JYcxys@3030@{}:{}/xjj_test_yct'.format(RABBITMQ_HOST,RABBITMQ_PORT)
 # BROKER_URL = 'amqp://cic_admin:JYcxys@3030@{}:{}/newprocy-yuanqu01'.format(RABBITMQ_HOST,RABBITMQ_PORT)
 # BROKER_URL = 'amqp://test:test@127.0.0.1:5672/test'
 
