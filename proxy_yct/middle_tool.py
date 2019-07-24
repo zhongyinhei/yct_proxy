@@ -30,6 +30,7 @@ redis_pool = redis.ConnectionPool(host=REDIS_HOST, port=REDIS_PORT, decode_respo
 r = redis.Redis(connection_pool=redis_pool)
 
 from handle_data.save_to_mysql import Save_to_sql
+import hashlib
 ##############################
 
 filter_info={'http_connect':['sh.gov.cn']}
@@ -101,10 +102,10 @@ class Proxy(classification_deal):
 
         # 1.非yct的请求 2.非css，js，jpg。。  3.非urlencode或json格式的，或空数据   4.过滤无用请求 -->不过滤了 都留着
         '''得到全数据parameters_dict'''
-
-        flow.request.product_id = str(random.random())
+        # product_id 保持一致
+        # flow.request.product_id = str(random.random())
         # '''区分不同页面的form 1.page_name=''错误的url 2.page_name=form_name 正确的url'''
-        page_name = filter_step(to_server)
+        # page_name = filter_step(to_server)
 
         # '''错误的url：parameters={无数据}      正确的url：parameters={有数据}'''
         # parameters = handel_parameter(parameters_dict, to_server)
@@ -123,8 +124,12 @@ class Proxy(classification_deal):
         #     'delete_set': False
         # }
 
+        page_name = filter_step(to_server)
+        time_result = str(flow.request.timestamp_start + flow.request.timestamp_end)
+        product_id = hashlib.md5(time_result.encode(encoding='UTF-8')).hexdigest() #'8ad9889144f3c6dd2c9763286f163229'
+
         analysis_data_bak = {
-            'product_id': flow.request.product_id,
+            'product_id': product_id,
             'customer_id': '',
             'methods': request.method,
             'web_name': request.host,
@@ -140,9 +145,9 @@ class Proxy(classification_deal):
         '''to_server,pagename,parameters,parameters_dict
         analysis_data    analysis_data_bak'''
 
-        logger.info('product_id=%s to_server=%s pageName=%s ' % (flow.request.product_id,to_server,page_name))
-        logger.info('product_id=%s parameters=%s ' % (flow.request.product_id, parameters_dict))
-        logger.info('product_id=%s analysis_data_bak=%s' % (flow.request.product_id,analysis_data_bak))
+        logger.info('product_id=%s to_server=%s pageName=%s ' % (product_id,to_server,page_name))
+        logger.info('product_id=%s parameters=%s ' % (product_id, parameters_dict))
+        logger.info('product_id=%s analysis_data_bak=%s' % (product_id,analysis_data_bak))
 
         # if page_name:
         #     logger.info('start analysis_data_bak=%s' % analysis_data_bak)
@@ -297,7 +302,6 @@ class Proxy(classification_deal):
         # data_bag['refer']=flow.request.headers.get('Referer','')
         data_bag['to_server'] = flow.request.url
         data_bag['response'] = flow.response
-        data_bag['product_id'] = flow.request.product_id
         return data_bag
 
     def yct_dealdatabag(self,flow):

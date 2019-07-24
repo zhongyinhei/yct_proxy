@@ -2,13 +2,13 @@
 logs
 test.py
 .idea
+.idea/workspace.xml
 *.iml
 *.xml
 =======
 logs
 test.py
 .idea
-.idea/workspace.xml
 *.iml
 *.xml
 >>>>>>> yct_proxy_test
