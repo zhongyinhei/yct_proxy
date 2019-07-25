@@ -14,6 +14,7 @@ import mitmproxy.websocket
 import mitmproxy.proxy.protocol
 import pickle
 import time
+import uuid
 from handle_data.main import handle_data
 
 ##############################
@@ -124,19 +125,30 @@ class Proxy(classification_deal):
         #     'delete_set': False
         # }
 
-        page_name = filter_step(to_server)
+        # page_name = filter_step(to_server)
+        # 生成一个和生产库保持一致的主键，当生产库有问题，拿到这个product_id 来此库中找对应记录
         time_result = str(flow.request.timestamp_start + flow.request.timestamp_end)
         product_id = hashlib.md5(time_result.encode(encoding='UTF-8')).hexdigest() #'8ad9889144f3c6dd2c9763286f163229'
 
-        analysis_data_bak = {
-            'product_id': product_id,
-            'customer_id': '',
+        # 自己通过uuid生成一些字段，避免入库时的一些更新操作，只做增加操作
+        customer_id = str(uuid.uuid4())
+        etpsName = str(uuid.uuid4())
+        registerAppNo = str(uuid.uuid4())
+        yctAppNo = str(uuid.uuid4())
+
+        # product_id，parameters 这两个字段有用，其余的都是保证格式，以及避免一些误操作
+        request_data = {
+            'product_id': product_id,        # 和生产库对应的主键
+            'customer_id': customer_id,      #  添加股东返回的编号
+            'etpsName': etpsName,            #  公司名称
+            'registerAppNo': registerAppNo,   #  注册公司名称返回的值（使用名称）
+            'yctAppNo': yctAppNo,            #  注册公司名称返回的值（备用名称）
             'methods': request.method,
             'web_name': request.host,
             'to_server': to_server,
             'time_circle': time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())),
-            'parameters': json.dumps(parameters_dict),
-            'pageName': page_name,
+            'parameters': json.dumps(parameters_dict), # request.urlencoded_form
+            'pageName': '',         # 这个字段全置空，没啥意义，还难看
             'anync': '',
             'isSynchronous': '0',
             'delete_set': False
@@ -145,9 +157,8 @@ class Proxy(classification_deal):
         '''to_server,pagename,parameters,parameters_dict
         analysis_data    analysis_data_bak'''
 
-        logger.info('product_id=%s to_server=%s pageName=%s ' % (product_id,to_server,page_name))
-        logger.info('product_id=%s parameters=%s ' % (product_id, parameters_dict))
-        logger.info('product_id=%s analysis_data_bak=%s' % (product_id,analysis_data_bak))
+        logger.info('product_id=%s parameters_dict=%s ' % (product_id, parameters_dict))
+        logger.info('product_id=%s analysis_data_bak=%s' % (product_id,request_data))
 
         # if page_name:
         #     logger.info('start analysis_data_bak=%s' % analysis_data_bak)
@@ -258,7 +269,7 @@ class Proxy(classification_deal):
         #         else:
         #             save_to_analysis.insert_new(analysis_data_bak)
         # else:
-        save_to_analysis.insert_new(analysis_data_bak)
+        save_to_analysis.insert_new(request_data)
         ####################################
 
     def responseheaders(self, flow: mitmproxy.http.HTTPFlow):

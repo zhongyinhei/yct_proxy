@@ -9,6 +9,6 @@ test.py
 logs
 test.py
 .idea
-*.iml
-*.xml
+.idea/*.iml
+.idea/*.xml
 >>>>>>> yct_proxy_test
