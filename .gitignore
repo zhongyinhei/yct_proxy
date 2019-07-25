@@ -1,5 +1,5 @@
 logs
 test.py
 .idea
-*.iml
-*.xml
+.idea/*.iml
+.idea/*.xml
